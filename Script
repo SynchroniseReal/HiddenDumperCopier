@@ -1,0 +1,29 @@
+-- made by .synchronise.
+local player = game:GetService("Players").LocalPlayer
+local scrollingFrame = player.PlayerGui.ScreenGui.Background.BottomBar.Output.ScrollingFrame
+local textData = {}
+
+for _, child in ipairs(scrollingFrame:GetChildren()) do
+    if child:IsA("Frame") then
+        local lineText = child:FindFirstChild("Line") and child.Line.Text or nil
+        local textText = child:FindFirstChild("Text") and child.Text.Text or nil
+        
+        if lineText then
+            lineText = lineText:gsub('<font color="#%x+">%s*(.-)%s*</font>', "%1")
+            table.insert(textData, lineText)
+        end
+        
+        if textText then
+            textText = textText:gsub('<font color="#%x+">%s*(.-)%s*</font>', "%1")
+            table.insert(textData, textText)
+        end
+    end
+end
+
+local combinedText = table.concat(textData, "\n")
+if setclipboard then
+    setclipboard(combinedText)
+    print("Output copied to clipboard")
+else
+    print("setclipboard function is not available on your executor")
+end
